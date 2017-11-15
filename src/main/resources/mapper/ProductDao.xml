@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.angusyu.mall.dao.ProductDao">
+    <sql id="insertProductKey">
+        <trim suffixOverrides=",">
+            name,price,stock,
+            <if test="product.imageSrc!=null">
+                image_src,
+            </if>
+            <if test="product.briefIntro!=null">
+                brief_intro,
+            </if>
+            <if test="product.detailInfo!=null">
+                detail_info,
+            </if>
+            <if test="product.productionDate!=null">
+                production_date,
+            </if>
+            <if test="product.expirationDate!=null">
+                expiration_date,
+            </if>
+            <if test="product.available!=null">
+                is_available,
+            </if>
+            <if test="product.recommended!=null">
+                is_recommended,
+            </if>
+            <if test="product.category!=null and product.category.id!=null">
+                category_id,
+            </if>
+        </trim>
+    </sql>
+    <sql id="insertProductValue">
+        <trim suffixOverrides=",">
+            #{product.name},#{product.price},#{product.stock},
+            <if test="product.imageSrc!=null">
+                #{product.imageSrc},
+            </if>
+            <if test="product.briefIntro!=null">
+                #{product.briefIntro},
+            </if>
+            <if test="product.detailInfo!=null">
+                #{product.detailInfo},
+            </if>
+            <if test="product.productionDate!=null">
+                #{product.productionDate},
+            </if>
+            <if test="product.expirationDate!=null">
+                #{product.expirationDate},
+            </if>
+            <if test="product.available!=null">
+                #{product.available},
+            </if>
+            <if test="product.recommended!=null">
+                #{product.recommended},
+            </if>
+            <if test="product.category!=null and product.category.id!=null">
+                #{product.category.id},
+            </if>
+        </trim>
+    </sql>
+    <insert id="insertProduct">
+        INSERT IGNORE INTO product(<include refid="insertProductKey"/>)
+        VALUES (<include refid="insertProductValue"/>)
+    </insert>
+
+    <update id="updateDeleteByIds">
+        UPDATE product
+        SET is_deleted = 1
+        WHERE is_deleted = 0
+        AND id IN
+        <foreach collection="list" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="updateProduct">
+        UPDATE product
+        <set>
+            <if test="product.name!=null">
+                name=#{product.name},
+            </if>
+            <if test="product.price!=null">
+                price=#{product.price},
+            </if>
+            <if test="product.stock!=null">
+                stock=#{product.stock},
+            </if>
+            <if test="product.imageSrc!=null">
+                image_src=#{product.imageSrc},
+            </if>
+            <if test="product.briefIntro!=null">
+                brief_intro=#{product.briefIntro},
+            </if>
+            <if test="product.detailInfo!=null">
+                detail_info=#{product.detailInfo},
+            </if>
+            <if test="product.productionDate!=null">
+                production_date=#{product.productionDate},
+            </if>
+            <if test="product.expirationDate!=null">
+                expiration_date=#{product.expirationDate},
+            </if>
+            <if test="product.available!=null">
+                is_available=#{product.available},
+            </if>
+            <if test="product.recommended!=null">
+                is_recommended=#{product.recommended},
+            </if>
+            <if test="product.category!=null and product.category.id!=null">
+                category_id=#{product.category.id},
+            </if>
+        </set>
+        WHERE is_deleted=0
+        AND id=#{product.id}
+    </update>
+
+    <select id="getIdById" resultType="java.lang.Long">
+        SELECT id
+        FROM product
+        WHERE is_deleted = 0 AND id = #{id}
+    </select>
+
+    <select id="getIdByName" resultType="java.lang.Long">
+        SELECT id
+        FROM product
+        WHERE is_deleted = 0
+              AND name = #{name}
+    </select>
+
+    <select id="getCategoryIdById" resultType="java.lang.Long">
+        SELECT category_id
+        FROM product
+        WHERE is_deleted = 0 AND id = #{id}
+    </select>
+
+    <resultMap id="productWithCategoryName" type="cn.angusyu.mall.entity.Product">
+        <id column="p.id" property="id"/>
+        <result column="p.name" property="name"/>
+        <result column="p.price" property="price"/>
+        <result column="p.stock" property="stock"/>
+        <result column="p.image_src" property="imageSrc"/>
+        <result column="p.brief_intro" property="briefIntro"/>
+        <result column="p.detail_info" property="detailInfo"/>
+        <result column="p.production_date" property="productionDate"/>
+        <result column="p.expiration_date" property="expirationDate"/>
+        <result column="p.is_available" property="available"/>
+        <result column="p.is_recommended" property="recommended"/>
+        <association property="category" javaType="cn.angusyu.mall.entity.Category">
+            <id column="c.id" property="id"/>
+            <result column="c.name" property="name"/>
+        </association>
+    </resultMap>
+
+    <select id="getById" resultMap="productWithCategoryName">
+        SELECT
+            p.id              'p.id',
+            p.name            'p.name',
+            p.price           'p.price',
+            p.stock           'p.stock',
+            p.image_src       'p.image_src',
+            p.brief_intro     'p.brief_intro',
+            p.detail_info     'p.detail_info',
+            p.production_date 'p.production_date',
+            p.expiration_date 'p.expiration_date',
+            p.is_available    'p.is_available',
+            p.is_recommended  'p.is_recommended',
+            c.id              'c.id',
+            c.name            'c.name'
+        FROM product p
+            LEFT JOIN category c ON p.category_id = c.id
+        WHERE p.is_deleted = 0 AND c.is_deleted = 0 AND p.id = #{id}
+    </select>
+
+    <select id="listAll" resultMap="productWithCategoryName">
+        SELECT
+            p.id              'p.id',
+            p.name            'p.name',
+            p.price           'p.price',
+            p.stock           'p.stock',
+            p.image_src       'p.image_src',
+            p.brief_intro     'p.brief_intro',
+            p.detail_info     'p.detail_info',
+            p.production_date 'p.production_date',
+            p.expiration_date 'p.expiration_date',
+            p.is_available    'p.is_available',
+            p.is_recommended  'p.is_recommended',
+            c.id              'c.id',
+            c.name            'c.name'
+        FROM product p
+            LEFT JOIN category c ON p.category_id = c.id
+        WHERE p.is_deleted = 0 AND c.is_deleted = 0
+        ORDER BY p.id
+    </select>
+
+    <select id="listAllQueryByFuzzyParam" resultMap="productWithCategoryName">
+        <bind name="param" value="'%'+fuzzyParam+'%'"/>
+        SELECT
+            p.id              'p.id',
+            p.name            'p.name',
+            p.price           'p.price',
+            p.stock           'p.stock',
+            p.image_src       'p.image_src',
+            p.brief_intro     'p.brief_intro',
+            p.detail_info     'p.detail_info',
+            p.production_date 'p.production_date',
+            p.expiration_date 'p.expiration_date',
+            p.is_available    'p.is_available',
+            p.is_recommended  'p.is_recommended',
+            c.id              'c.id',
+            c.name            'c.name'
+        FROM product p
+            LEFT JOIN category c ON p.category_id = c.id
+        WHERE p.is_deleted = 0 AND c.is_deleted = 0
+              AND c.name LIKE #{param} OR  p.name LIKE #{param}
+                OR p.brief_intro LIKE #{param} OR p.detail_info LIKE #{param}
+        ORDER BY p.id
+    </select>
+</mapper>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.angusyu.mall.dao.CategoryDao">
+    <insert id="insertCategory">
+        INSERT IGNORE INTO category (name, is_hot)
+        VALUES (#{category.name}, #{category.hot})
+    </insert>
+
+    <update id="updateDeleteByIds">
+        UPDATE category
+        SET is_deleted = 1
+        WHERE is_deleted = 0
+        AND id IN
+        <foreach collection="list" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="updateCategory">
+        UPDATE category
+        <set>
+            <if test="category.name!=null">
+                name = #{category.name},
+            </if>
+            <if test="category.hot!=null">
+                is_hot = #{category.hot},
+            </if>
+        </set>
+        WHERE is_deleted = 0
+        AND id = #{category.id}
+    </update>
+
+    <update id="updateIncreaseProductAmountById">
+        UPDATE category
+        SET product_amount = product_amount + 1
+        WHERE is_deleted = 0 AND id = #{id}
+    </update>
+
+    <update id="updateDecreaseProductAmountById">
+        UPDATE category
+        SET product_amount = product_amount - 1
+        WHERE is_deleted = 0 AND id = #{id}
+    </update>
+
+    <select id="getProductAmountById" resultType="java.lang.Integer">
+        SELECT product_amount
+        FROM category
+        WHERE id = #{id}
+    </select>
+
+    <select id="getIdById" resultType="java.lang.Long">
+        SELECT id
+        FROM category
+        WHERE is_deleted = 0 AND id = #{id}
+    </select>
+
+    <select id="getIdByName" resultType="Long">
+        SELECT id
+        FROM category
+        WHERE is_deleted = 0
+              AND name = #{name}
+    </select>
+
+    <select id="getById" resultType="cn.angusyu.mall.entity.Category">
+        SELECT
+            id,
+            name,
+            is_hot 'hot',
+            product_amount
+        FROM category
+        WHERE is_deleted = 0
+              AND id = #{id}
+    </select>
+
+    <select id="listAll" resultType="cn.angusyu.mall.entity.Category">
+        SELECT
+            id,
+            name,
+            is_hot 'hot',
+            product_amount
+        FROM category
+        WHERE is_deleted = 0
+        ORDER BY id
+    </select>
+
+    <select id="listAllFuzzyQueryByName" resultType="cn.angusyu.mall.entity.Category">
+        <bind name="param" value="'%'+fuzzyParam+'%'"/>
+        SELECT
+            id,
+            name,
+            is_hot 'hot',
+            product_amount
+        FROM category
+        WHERE is_deleted = 0 AND name LIKE #{param}
+        ORDER BY id
+    </select>
+</mapper>

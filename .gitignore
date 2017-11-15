@@ -1,0 +1,8 @@
+.idea/
+src/main/java/cn/angusyu/controller/frontend/
+src/main/webapp/resources/img/
+src/main/webapp/resources/jquery-easyui-1.5.3/demo
+src/main/webapp/resources/jquery-easyui-1.5.3/demo-mobile
+src/main/webapp/WEB-INF/pages/frontend/
+src/test/
+target/

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.angusyu.mall.dao.UserDao">
+    <sql id="insertUserKey">
+        <trim suffixOverrides=",">
+            login_name, password,user_name,
+            <if test="user.sex!=null">
+                sex,
+            </if>
+            <if test="user.phone!=null">
+                phone,
+            </if>
+            <if test="user.email!=null">
+                email,
+            </if>
+            <if test="user.address!=null">
+                address,
+            </if>
+        </trim>
+    </sql>
+    <sql id="insertUserValue">
+        <trim suffixOverrides=",">
+            #{user.loginName},#{user.password},#{user.userName},
+            <if test="user.sex!=null">
+                #{user.sex},
+            </if>
+            <if test="user.phone!=null">
+                #{user.phone},
+            </if>
+            <if test="user.email!=null">
+                #{user.email},
+            </if>
+            <if test="user.address!=null">
+                #{user.address},
+            </if>
+        </trim>
+    </sql>
+    <insert id="insertUser">
+        INSERT IGNORE INTO user(<include refid="insertUserKey"/>)
+        VALUES (<include refid="insertUserValue"/>)
+    </insert>
+
+    <update id="updateUser">
+        UPDATE user
+        <set>
+            <if test="user.loginName!=null">
+                login_name = #{user.loginName},
+            </if>
+            <if test="user.password!=null">
+                password = #{user.password},
+            </if>
+            <if test="user.userName!=null">
+                user_name = #{user.userName},
+            </if>
+            <if test="user.sex!=null">
+                sex = #{user.sex},
+            </if>
+            <if test="user.phone!=null">
+                phone = #{user.phone},
+            </if>
+            <if test="user.email!=null">
+                email = #{user.email},
+            </if>
+            <if test="user.address!=null">
+                address = #{user.address},
+            </if>
+        </set>
+        WHERE is_deleted = 0
+        AND id = #{user.id}
+    </update>
+
+    <update id="updateDeleteByIds">
+        UPDATE user
+        SET is_deleted = 1
+        WHERE is_deleted = 0
+        AND id IN
+        <foreach collection="list" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </update>
+
+    <select id="getById" resultType="cn.angusyu.mall.entity.User">
+        SELECT
+            id,
+            login_name,
+            password,
+            user_name,
+            sex,
+            phone,
+            email,
+            address
+        FROM user
+        WHERE is_deleted = 0 AND id = #{id}
+    </select>
+
+    <select id="getByLoginName" resultType="cn.angusyu.mall.entity.User">
+        SELECT
+            login_name,
+            password,
+            user_name
+        FROM user
+        WHERE is_deleted = 0 AND login_name = #{loginName}
+    </select>
+
+    <select id="getByLoginNameCaseSensitive" resultType="cn.angusyu.mall.entity.User">
+        SELECT
+            login_name,
+            password,
+            user_name
+        FROM user
+        WHERE is_deleted = 0 AND BINARY login_name = #{loginName}
+    </select>
+
+    <select id="listAll" resultType="cn.angusyu.mall.entity.User">
+        SELECT
+            id,
+            login_name,
+            password,
+            user_name,
+            sex,
+            phone,
+            email,
+            address
+        FROM user
+        WHERE is_deleted = 0
+        ORDER BY id
+    </select>
+
+    <select id="listAllQueryByFuzzyParam" resultType="cn.angusyu.mall.entity.User">
+        <bind name="param" value="'%'+fuzzyParam+'%'"/>
+        SELECT
+            id,
+            login_name,
+            password,
+            user_name,
+            sex,
+            phone,
+            email,
+            address
+        FROM user
+        WHERE is_deleted = 0
+              AND login_name LIKE #{param} OR user_name LIKE #{param}
+              OR phone LIKE #{param} OR email LIKE #{param} OR address LIKE #{param}
+        ORDER BY id
+    </select>
+</mapper>

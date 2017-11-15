@@ -1,0 +1,21 @@
+body {
+    font-family:verdana,helvetica,arial,sans-serif;
+    font-size:12px;
+    margin:0;
+}
+.label-top{
+    display: block;
+    height: 22px;
+    line-height: 22px;
+    vertical-align: middle;
+}
+div.input-group-left,div.input-group-center,div.input-group-right{
+    vertical-align: middle;display: inline-block;float: none;margin-left: 10px;
+}
+div.input-group-left div,div.input-group-center div,div.input-group-right div{
+    margin-top: 10px;
+}
+.datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber{
+    -o-text-overflow: ellipsis;
+    text-overflow: ellipsis;
+}

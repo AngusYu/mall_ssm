@@ -1,0 +1,83 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.angusyu.mall.dao.AdminDao">
+
+    <insert id="insertAdmin" parameterType="cn.angusyu.mall.entity.Admin">
+        INSERT IGNORE INTO admin (login_name, password)
+        VALUES (#{admin.loginName}, #{admin.password})
+    </insert>
+
+    <update id="updateDeleteByIds">
+        UPDATE admin
+        SET is_deleted = 1
+        WHERE is_deleted = 0
+        AND id IN
+        <foreach collection="list" open="(" close=")" separator="," item="ids">
+            #{ids}
+        </foreach>
+    </update>
+
+    <update id="updateAdmin">
+        UPDATE admin
+        <set>
+            <if test="admin.loginName!=null">
+                login_name=#{admin.loginName},
+            </if>
+            <if test="admin.password!=null">
+                password=#{admin.password}
+            </if>
+        </set>
+        WHERE is_deleted = 0 AND id = #{admin.id}
+    </update>
+
+    <select id="getById" resultType="cn.angusyu.mall.entity.Admin">
+        SELECT
+            id,
+            login_name,
+            password
+        FROM admin
+        WHERE is_deleted = 0 AND id = #{id}
+    </select>
+
+    <select id="getByLoginName" resultType="cn.angusyu.mall.entity.Admin">
+        SELECT
+            id,
+            login_name,
+            password
+        FROM admin
+        WHERE is_deleted = 0 AND login_name = #{loginName}
+    </select>
+
+    <select id="getByLoginNameCaseSensitive" resultType="cn.angusyu.mall.entity.Admin">
+        SELECT
+            id,
+            login_name,
+            password
+        FROM admin
+        WHERE is_deleted = 0 AND BINARY login_name = #{loginName}
+    </select>
+
+    <select id="listAll" resultType="cn.angusyu.mall.entity.Admin">
+        SELECT
+            id,
+            login_name,
+            password
+        FROM admin
+        WHERE is_deleted = 0
+        ORDER BY id
+    </select>
+
+    <select id="listAllQueryByFuzzyParam" resultType="cn.angusyu.mall.entity.Admin">
+        <bind name="param" value="'%'+fuzzyParam+'%'"/>
+        SELECT
+            id,
+            login_name,
+            password
+        FROM
+            admin
+        WHERE is_deleted = 0 AND login_name LIKE #{param}
+        ORDER BY id
+    </select>
+</mapper>
