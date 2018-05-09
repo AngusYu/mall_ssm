@@ -3,7 +3,7 @@
 ###后端<br>
 框架: SSM(Spring, SpringMVC, MyBatis)<br>
 数据库: MySQL 5.6<br>
-数据库连接池: c3p0<br>
+数据库连接池: druid<br>
 MyBatis分页插件: PageHelper<br>
 日志: logback<br>
 应用服务器: Tomcat 8.5.23<br>
@@ -12,7 +12,7 @@ MyBatis分页插件: PageHelper<br>
 EasyUI-jQuery<br>
 ###数据<br>
 京东超市<br>
-通过jsoup抓取和初步处理网页, 再通过Python批量下载图片和数据的再次处理.<br>
+通过Jsoup抓取和初步处理网页, 再通过Python批量下载图片和数据的再次处理.<br>
 ###完成情况<br>
 login: 使用Ajax submit, 返回验证情况(-2,-1,0,1), 成功时返回1, HttpSession中存储"admin", 由前端页面JS根据返回值进行跳转或提示.<br>
 logout: HttpSession移除"admin"<br>
