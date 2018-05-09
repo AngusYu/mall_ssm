@@ -22,11 +22,11 @@ category, product, user, admin: <br>
 ...改: 字段前端验证加后端处理和验证. 前端在修改项时, 对关键字段通过Ajax确认字段的合法性. 后端在业务层先确认修改项的id是否合法, 在对内容合法性进行再次检查处理和验证.<br>
 ...查: 前端上传模糊字, 后端使用MySQL的模糊查询, 在DAO层预先定义好可以模糊查询的字段.<br>
 ###截图<br>
-login:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/login.PNG)
-index:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/index.PNG)
-category:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/category.PNG)
-product:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/product.PNG)
-product/edit:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/product_edit.PNG)
-user:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/user.PNG)
-user/edit:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/user_edit.PNG)
-admin:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/admin_edit.PNG)
+login:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/login.png)
+index:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/index.png)
+category:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/category.png)
+product:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/product.png)
+product/edit:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/product_edit.png)
+user:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/user.png)
+user/edit:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/user_edit.png)
+admin:![image](https://raw.githubusercontent.com/AngusYu/mall_ssm/master/capture/backend/admin_edit.png)
